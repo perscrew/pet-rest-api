@@ -13,7 +13,7 @@
 
     <properties>
         <!-- The main class to start by executing java -jar -->
-        <start-class>fr.pet.rest.app.Application</start-class>
+        <start-class>fr.pet.rest.core.app.Application</start-class>
     </properties>
 
     <dependencies>
@@ -30,6 +30,11 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

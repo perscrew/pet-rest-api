@@ -1,9 +1,6 @@
 package fr.pet.rest.core.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -13,22 +10,24 @@ import java.io.Serializable;
 public class Pet implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUST_SEQ")
+    @SequenceGenerator(sequenceName = "S_PET", allocationSize = 1, name = "S_PET")
     Long id;
     @Column(nullable = false)
     String name;
     @Column(nullable = false)
-    Integer weight;
+    Integer quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REF_CLIENT")
     Category category;
 
     public Pet() {
     }
 
-    public Pet(Long id, String name, Integer weight, Category category) {
-        this.id = id;
+    public Pet(String name, Integer quantity, Category category) {
         this.name = name;
-        this.weight = weight;
+        this.quantity = quantity;
         this.category = category;
     }
 
@@ -48,12 +47,12 @@ public class Pet implements Serializable {
         this.name = name;
     }
 
-    public Integer getWeight() {
-        return weight;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setWeight(Integer weight) {
-        this.weight = weight;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public Category getCategory() {
