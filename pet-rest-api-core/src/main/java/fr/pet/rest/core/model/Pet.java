@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class Pet implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUST_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_PET")
     @SequenceGenerator(sequenceName = "S_PET", allocationSize = 1, name = "S_PET")
     Long id;
     @Column(nullable = false)
@@ -18,8 +18,8 @@ public class Pet implements Serializable {
     @Column(nullable = false)
     Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_CLIENT")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CAT_ID")
     Category category;
 
     public Pet() {

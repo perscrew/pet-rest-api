@@ -5,21 +5,17 @@ import fr.pet.rest.core.dao.PetRepository;
 import fr.pet.rest.core.model.Category;
 import fr.pet.rest.core.model.Pet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 /**
  * Created by TDERVILY on 01/03/2017.
  */
 @RestController
 @RequestMapping("/pet")
-@EnableAutoConfiguration
 public class PetController {
 
     private final PetRepository petRepository;
@@ -31,40 +27,45 @@ public class PetController {
         this.categoryRepository = categoryRepository;
     }
 
-    @RequestMapping(path = "/add", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> add(@RequestBody Pet pet) {
         return savePet(pet);
     }
 
-    @RequestMapping(path = "/add", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestBody Pet pet) {
-        // Fetch pet category from id
-        return savePet(pet);
+        if (petRepository.findOne(pet.getId()) != null) {
+            return savePet(pet);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
-    @RequestMapping(path = "/update", method = RequestMethod.PUT)
-    public Page list(@RequestBody Pageable pageable) {
-        return this.petRepository.findAll(pageable);
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public ResponseEntity<Page> list(@RequestBody PageRequest pageable) {
+        return new ResponseEntity<>(this.petRepository.findAll(pageable), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/{petId}", method = RequestMethod.GET)
-    public Pet get(@PathVariable Long petId) {
-        return petRepository.findOne(petId);
+    @RequestMapping(value = "/{petId}", method = RequestMethod.GET)
+    public ResponseEntity<Pet> getById(@PathVariable Long petId) {
+        return  new ResponseEntity<>(petRepository.findOne(petId), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{petId}", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable Long petId) {
+        petRepository.delete(petId);
+        return ResponseEntity.ok().build();
     }
 
     private ResponseEntity<?> savePet(Pet pet) {
         // Fetch pet category from id
         Category category = this.categoryRepository.findOne(pet.getCategory().getId());
 
-        if (category != null)
+        if (category == null)
             return ResponseEntity.noContent().build();
 
         // Save pet
-        Pet result = petRepository.save(new Pet(pet.getName(), pet.getQuantity(), category));
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(result.getId()).toUri();
-        return ResponseEntity.created(location).build();
+        pet.setCategory(category);
+        return new ResponseEntity<>(petRepository.save(pet), HttpStatus.OK);
     }
 }

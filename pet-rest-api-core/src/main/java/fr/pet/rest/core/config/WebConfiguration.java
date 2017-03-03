@@ -1,4 +1,4 @@
-package fr.pet.rest.api.config;
+package fr.pet.rest.core.config;
 
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;

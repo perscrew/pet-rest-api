@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS CATEGORY;
 DROP TABLE IF EXISTS PET;
 DROP SEQUENCE IF EXISTS S_PET;
 
-create sequence S_PET START WITH 1;
+create sequence S_PET START WITH 0;
 
 /*==============================================================*/
 /* Table : PET		                                        */
