@@ -1,4 +1,4 @@
-import fr.pet.rest.core.app.Application;
+import fr.pet.rest.app.Application;
 import fr.pet.rest.core.dao.CategoryRepository;
 import fr.pet.rest.core.dao.PetRepository;
 import fr.pet.rest.core.model.Category;
@@ -76,13 +76,12 @@ public class PetControllerTest {
 
     @Test
     public void getPetDetail() throws Exception {
-        mockMvc.perform(get("/pet/" + pet.getId())
+        mockMvc.perform(get("/pet/1")
                 .contentType(contentType))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.id", is(pet.getId())))
-                .andExpect(jsonPath("$.name", is(pet.getName())))
-                .andExpect(jsonPath("$.quantity", is(pet.getQuantity())));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Labrador chocolate")))
+                .andExpect(jsonPath("$.quantity", is(3)));
     }
 
     @Test
@@ -114,9 +113,7 @@ public class PetControllerTest {
 
     @Test
     public void getAll() throws Exception {
-        mockMvc.perform(post("/pet/list")
-                .content(json(new PageRequest(1, 10)))
-                .contentType(contentType))
+        mockMvc.perform(get("/pet/list?page=1&size=10"))
                 .andExpect(status().isOk());
     }
 
