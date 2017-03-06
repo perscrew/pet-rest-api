@@ -36,18 +36,10 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-public class PetControllerTest {
+public class PetControllerTest extends BaseTest {
 
-    private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(),
-            Charset.forName("utf8"));
-
-    private MockMvc mockMvc;
-    private HttpMessageConverter mappingJackson2HttpMessageConverter;
     private Pet pet;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
@@ -63,16 +55,6 @@ public class PetControllerTest {
         pet = petRepository.findOne(1L);
     }
 
-    @Autowired
-    void setConverters(HttpMessageConverter<?>[] converters) {
-        this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream()
-                .filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter)
-                .findAny()
-                .orElse(null);
-
-        assertNotNull("the JSON message converter must not be null", this.mappingJackson2HttpMessageConverter);
-    }
-
     @Test
     public void testCRUD() throws Exception {
         test1GetPetDetail();
@@ -86,10 +68,10 @@ public class PetControllerTest {
         mockMvc.perform(get("/pet/" + pet.getId())
                 .contentType(contentType))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(pet.getId())))
+                .andExpect(jsonPath("$.id", is(pet.getId().intValue())))
                 .andExpect(jsonPath("$.name", is(pet.getName())))
                 .andExpect(jsonPath("$.quantity", is(pet.getQuantity())))
-                .andExpect(jsonPath("$.category.id", is(pet.getCategory().getId())));
+                .andExpect(jsonPath("$.category.id", is(pet.getCategory().getId().intValue())));
     }
 
     private void test2AddPet() throws Exception {
@@ -126,12 +108,4 @@ public class PetControllerTest {
                 .andExpect(status().isOk());
     }
 
-
-
-    protected String json(Object o) throws IOException {
-        MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
-        this.mappingJackson2HttpMessageConverter.write(
-                o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
-        return mockHttpOutputMessage.getBodyAsString();
-    }
 }
