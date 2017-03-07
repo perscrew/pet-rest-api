@@ -28,11 +28,13 @@ public class PetController {
         this.categoryRepository = categoryRepository;
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> add(@RequestBody Pet pet) {
         return savePet(pet);
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestBody Pet pet) {
         if (petRepository.findOne(pet.getId()) != null) {
@@ -42,16 +44,19 @@ public class PetController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<Page> list(Pageable pageable) {
         return new ResponseEntity<>(this.petRepository.findAll(pageable), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/{petId}", method = RequestMethod.GET)
     public ResponseEntity<Pet> getById(@PathVariable Long petId) {
         return  new ResponseEntity<>(petRepository.findOne(petId), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/{petId}", method = RequestMethod.DELETE)
     public ResponseEntity delete(@PathVariable Long petId) {
         petRepository.delete(petId);

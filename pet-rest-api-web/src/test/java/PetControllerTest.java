@@ -97,7 +97,7 @@ public class PetControllerTest extends BaseTest {
     }
 
     private void test4getAll() throws Exception {
-        mockMvc.perform(get("/pet/list?page=1&size=10"))
+        mockMvc.perform(get("/pet/list?page=0&size=10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", isA(JSONArray.class)));
     }
