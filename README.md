@@ -1,4 +1,7 @@
 # Pet-Shop REST API
+
+[![Build Status](https://travis-ci.org/perscrew/pet-rest-api.svg?branch=master)](https://travis-ci.org/perscrew/pet-rest-api)
+
 This project exposes some REST CRUD service for a Pet Shop.
 It demonstrates the use of Spring-boot & Java 8.
 An h2 in memory database has been used to store the pet shop data.
@@ -99,4 +102,4 @@ You will find below the different third party libraries used in the project.
 - Use Spring profile to allow multiple environments configuration.
 - Add OAUTH2 or JWT security to retrieve a token for the frontend. The library spring-security could be used.
 - Use Jpa transactions to handle concurrency
--
+
