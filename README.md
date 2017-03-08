@@ -99,3 +99,4 @@ You will find below the different third party libraries used in the project.
 - Use Spring profile to allow multiple environments configuration.
 - Add OAUTH2 or JWT security to retrieve a token for the frontend. The library spring-security could be used.
 - Use Jpa transactions to handle concurrency
+-
